@@ -14,7 +14,7 @@ const SplashScreen = () => {
   useEffect(() => {
     //start up sim
     setTimeout(() => {
-      router.replace("/index");
+      router.replace("./index");
     }, 2000); //simulating a 2 second loading time
   }, [router]);
 
