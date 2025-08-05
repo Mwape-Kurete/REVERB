@@ -6,12 +6,16 @@ import {
   View,
 } from "react-native";
 import React from "react";
+import { useRouter } from "expo-router";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-gesture-handler";
 
 const LoginScreen = () => {
+  const router = useRouter();
+
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View>
         <Text>Log In</Text>
       </View>
@@ -20,11 +24,14 @@ const LoginScreen = () => {
         <TextInput placeholder="Password" secureTextEntry={true} />
       </View>
       <View>
+        {/* replace the onPress below with the authContext  */}
         <TouchableOpacity>
-          <Text>Log In</Text>
+          <Text onPress={() => router.push("../(tabs)/")}>Log In</Text>
         </TouchableOpacity>
         <TouchableHighlight>
-          <Text>Don`&apsos`t Have an Account? Sign Up!</Text>
+          <Text onPress={() => router.push("/(auth)/RegistrationScreen")}>
+            Dont Have an Account? Sign Up!
+          </Text>
         </TouchableHighlight>
       </View>
     </SafeAreaView>
@@ -33,4 +40,11 @@ const LoginScreen = () => {
 
 export default LoginScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+  },
+});
