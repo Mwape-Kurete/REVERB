@@ -1,11 +1,29 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 
 const OnboardingScreen = () => {
   return (
-    <View>
-      <Text>OnboardingScreen</Text>
-    </View>
+    <SafeAreaView>
+      <View>
+        <Text>Welcome to REVERB</Text>
+        <Text>Taking journaling to whole new level</Text>
+      </View>
+      <View>
+        <TouchableOpacity>
+          <Text>Log In</Text>
+        </TouchableOpacity>
+        <TouchableHighlight>
+          <Text>Don`&apsos`t Have an Account? Sign Up!</Text>
+        </TouchableHighlight>
+      </View>
+    </SafeAreaView>
   );
 };
 
