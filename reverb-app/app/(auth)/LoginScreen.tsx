@@ -44,13 +44,11 @@ const LoginScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         {/* replace the onPress below with the authContext  */}
-        <TouchableOpacity style={GlobalStyles.primaryButton}>
-          <Text
-            style={GlobalStyles.textPrimary}
-            onPress={() => router.push("../(tabs)/")}
-          >
-            Log In
-          </Text>
+        <TouchableOpacity
+          style={GlobalStyles.primaryButton}
+          onPress={() => router.push("../(tabs)/HomeScreen")}
+        >
+          <Text style={GlobalStyles.textPrimary}>Log In</Text>
         </TouchableOpacity>
         <TouchableHighlight
           underlayColor="#F5EDFC"
