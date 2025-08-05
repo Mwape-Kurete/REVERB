@@ -11,25 +11,51 @@ import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-gesture-handler";
 
+import GlobalStyles from "@/styles/GlobalStyles";
+
 const LoginScreen = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View>
-        <Text>Log In</Text>
+    <SafeAreaView style={GlobalStyles.container}>
+      <View style={styles.headerContain}>
+        <Text style={GlobalStyles.headerText}>Log In</Text>
       </View>
-      <View>
-        <TextInput placeholder="Email Address" />
-        <TextInput placeholder="Password" secureTextEntry={true} />
+      <View style={styles.formContainer}>
+        <TextInput
+          style={[
+            GlobalStyles.formInput,
+            GlobalStyles.spacerSmaller,
+            GlobalStyles.spacerMed,
+          ]}
+          placeholder="Email Address"
+          placeholderTextColor={GlobalStyles.textPlaceholder.color}
+        />
+        <TextInput
+          style={[
+            GlobalStyles.formInput,
+            GlobalStyles.spacerSmaller,
+            GlobalStyles.spacerMed,
+          ]}
+          placeholder="Password"
+          placeholderTextColor={GlobalStyles.textPlaceholder.color}
+          secureTextEntry={true}
+        />
       </View>
-      <View>
+      <View style={styles.buttonContainer}>
         {/* replace the onPress below with the authContext  */}
-        <TouchableOpacity>
-          <Text onPress={() => router.push("../(tabs)/")}>Log In</Text>
+        <TouchableOpacity
+          style={GlobalStyles.primaryButton}
+          onPress={() => router.push("../(tabs)/HomeScreen")}
+        >
+          <Text style={GlobalStyles.textPrimary}>Log In</Text>
         </TouchableOpacity>
-        <TouchableHighlight>
-          <Text onPress={() => router.push("/(auth)/RegistrationScreen")}>
+        <TouchableHighlight
+          underlayColor="#F5EDFC"
+          style={GlobalStyles.ghostButton}
+          onPress={() => router.push("/(auth)/RegistrationScreen")}
+        >
+          <Text style={GlobalStyles.textInfo}>
             Dont Have an Account? Sign Up!
           </Text>
         </TouchableHighlight>
@@ -41,10 +67,18 @@ const LoginScreen = () => {
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  headerContain: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 20,
+    marginTop: "25%",
+  },
+  formContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+  buttonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
