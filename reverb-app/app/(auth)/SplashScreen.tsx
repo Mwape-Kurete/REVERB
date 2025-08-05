@@ -14,7 +14,7 @@ const SplashScreen = () => {
   useEffect(() => {
     //start up sim
     setTimeout(() => {
-      router.replace("/(auth)/OnboardingScreen");
+      router.replace("/index");
     }, 2000); //simulating a 2 second loading time
   }, [router]);
 
@@ -22,7 +22,6 @@ const SplashScreen = () => {
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color={"#5F2F86"} />
-        <Text>Loading...</Text>
       </View>
     </SafeAreaView>
   );

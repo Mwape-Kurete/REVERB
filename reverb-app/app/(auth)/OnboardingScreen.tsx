@@ -9,36 +9,41 @@ import {
 import React from "react";
 import { useRouter } from "expo-router";
 
-const OnboardingScreen = () => {
+import GlobalStyles from "@/styles/GlobalStyles";
+
+export default function AuthLanding() {
   const router = useRouter();
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={GlobalStyles.container}>
       <View>
-        <Text>Welcome to REVERB</Text>
-        <Text>Taking journaling to whole new level</Text>
+        <Text style={[GlobalStyles.headerText, GlobalStyles.spacerLarge]}>
+          Welcome to REVERB
+        </Text>
+        <Text style={GlobalStyles.subHeaderText}>
+          Taking journaling to whole new level
+        </Text>
       </View>
       <View>
-        <TouchableOpacity>
-          <Text onPress={() => router.push("/(auth)/LoginScreen")}>Log In</Text>
+        <TouchableOpacity style={GlobalStyles.primaryButton}>
+          <Text
+            style={GlobalStyles.textPrimary}
+            onPress={() => router.push("/(auth)/LoginScreen")}
+          >
+            Log In
+          </Text>
         </TouchableOpacity>
         <TouchableHighlight
+          style={GlobalStyles.ghostButton}
           onPress={() => router.push("/(auth)/RegistrationScreen")}
         >
-          <Text>Don`t Have an Account? Sign Up!</Text>
+          <Text style={GlobalStyles.textInfo}>
+            Dont Have an Account? Sign Up!
+          </Text>
         </TouchableHighlight>
       </View>
     </SafeAreaView>
   );
-};
+}
 
-export default OnboardingScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-  },
-});
+const styles = StyleSheet.create({});
