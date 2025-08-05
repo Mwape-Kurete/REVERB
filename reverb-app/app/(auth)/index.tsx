@@ -9,7 +9,7 @@ import {
 import React from "react";
 import { useRouter } from "expo-router";
 
-const OnboardingScreen = () => {
+export default function AuthLanding() {
   const router = useRouter();
 
   return (
@@ -25,14 +25,12 @@ const OnboardingScreen = () => {
         <TouchableHighlight
           onPress={() => router.push("/(auth)/RegistrationScreen")}
         >
-          <Text>Don`t Have an Account? Sign Up!</Text>
+          <Text>Dont Have an Account? Sign Up!</Text>
         </TouchableHighlight>
       </View>
     </SafeAreaView>
   );
-};
-
-export default OnboardingScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
