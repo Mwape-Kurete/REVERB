@@ -10,14 +10,14 @@ const GlobalStyles = StyleSheet.create({
     backgroundColor: "#ffffff",
   },
   textPrimary: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#020103",
     fontFamily: "Comfortaa",
     alignItems: "center",
     justifyContent: "center",
   },
   textSecondary: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#020103",
     fontFamily: "Comfortaa",
     alignItems: "center",
@@ -37,8 +37,7 @@ const GlobalStyles = StyleSheet.create({
   },
   headerText: {
     fontSize: 24,
-    fontWeight: 600,
-    fontFamily: "Michroma",
+    fontFamily: "Michroma_400Regular",
     color: "#020103",
     alignItems: "center",
     justifyContent: "center",

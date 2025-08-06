@@ -17,36 +17,61 @@ import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
   return (
-    <SafeAreaView style={GlobalStyles.container}>
+    <SafeAreaView style={[GlobalStyles.container]}>
       <View style={styles.topSect}>
-        <Text style={[GlobalStyles.subHeaderText, { fontWeight: 400 }]}>
-          Quote of the Day
-        </Text>
-        <Text style={[GlobalStyles.textInfo]}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </Text>
-
-        <TouchableOpacity style={GlobalStyles.TertiaryButton}>
-          <Text style={GlobalStyles.subHeaderText}>Prompt Me</Text>
-        </TouchableOpacity>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text
+            style={[
+              GlobalStyles.subHeaderText,
+              GlobalStyles.spacerSmaller,
+              { fontWeight: 400 },
+            ]}
+          >
+            Quote of the Day
+          </Text>
+          <Text style={[GlobalStyles.textInfo]}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          </Text>
+        </View>
+        <View>
+          <TouchableOpacity style={GlobalStyles.TertiaryButton}>
+            <Text
+              style={[
+                GlobalStyles.textSecondary,
+                {
+                  fontFamily: "Michroma_400Regular",
+                  color: "#020103",
+                  fontSize: 14,
+                },
+              ]}
+            >
+              Record a future note
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.bottomOut}>
         <View style={styles.bottomCardRow}>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>REVERB Timeline</Text>
-            <AntDesign name="arrowright" size={40} color="#020103" />
+            <AntDesign name="arrowright" size={40} color="#5F2F86" />
           </ReverbCards>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>Weekly REVERB Recap</Text>
-            <AntDesign name="arrowright" size={40} color="#020103" />
+            <AntDesign name="arrowright" size={40} color="#5F2F86" />
           </ReverbCards>
         </View>
         <View style={styles.bottomSect}>
           <TouchableOpacity style={styles.medButton}>
-            <Entypo name="controller-record" size={24} color="white" />
+            <Entypo name="controller-record" size={24} color="#ffffff" />
             <Text style={{ color: "#ffffff" }}>
               Record a{" "}
-              <Text style={{ fontWeight: "bold", color: "#ffffff" }}>
+              <Text
+                style={{
+                  fontFamily: "Michroma_400Regular",
+                  color: "#ffffff",
+                }}
+              >
                 REVERB
               </Text>
             </Text>
@@ -63,12 +88,10 @@ const styles = StyleSheet.create({
   topSect: {
     flexDirection: "column",
     width: "100%",
-    height: "30%",
+    height: "45%",
     alignItems: "center",
     justifyContent: "space-between",
-    marginTop: 24,
-    paddingHorizontal: 20,
-    gap: 8,
+    marginTop: 32,
   },
   bottomSect: {
     width: "100%",
@@ -81,7 +104,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
     paddingHorizontal: 16,
     gap: 16,
     width: "95%",
@@ -91,7 +114,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 24,
+    borderTopWidth: 1,
     borderColor: "#020103",
+    backgroundColor: "#ffffff",
+    padding: 12,
   },
   custCard: {
     justifyContent: "space-between",
@@ -101,7 +127,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#21102F",
     color: "#ffffff",
     height: 56,
-    minWidth: "50%",
+    minWidth: "48%",
     padding: 12,
     marginBottom: 12,
     borderRadius: 12,
