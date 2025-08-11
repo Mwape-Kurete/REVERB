@@ -1,17 +1,30 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ReverbCards from "@/components/ui/ReverbCards";
 import GlobalStyles from "@/styles/GlobalStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 
+// Import your recording components and hook
+import RecordingAnimation from "@/components/RecordingAnimation"; // update path as needed
+import RecordingControls from "@/components/RecordingControls"; // update path as needed
+import RecordingLogic from "@/components/RecordingLogic"; // update path as needed
+
 const NewScreen = () => {
+  // Use the recording hook to get state & control functions
+  const { isRecording, durationMillis, startRecording, stopRecording, uri } =
+    RecordingLogic();
+
+  // Format duration as mm:ss for display
+  const formatDuration = (ms: number) => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (totalSeconds % 60).toString().padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
+
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
       <View style={styles.topSect}>
@@ -20,7 +33,7 @@ const NewScreen = () => {
             style={[
               GlobalStyles.subHeaderText,
               GlobalStyles.spacerSmaller,
-              { fontWeight: 400 },
+              { fontWeight: "400" },
             ]}
           >
             Prompt of the Day
@@ -29,22 +42,35 @@ const NewScreen = () => {
             Lorem ipsum dolor sit amet consectetur adipisicing elit.
           </Text>
         </View>
-      </View>
-      <View style={styles.bottomOut}>
-        <TouchableOpacity style={styles.medButton}>
-          <Entypo name="controller-record" size={24} color="#ffffff" />
-          <Text style={{ color: "#ffffff" }}>
-            Record a{" "}
-            <Text
-              style={{
-                fontFamily: "Michroma_400Regular",
-                color: "#ffffff",
-              }}
-            >
-              REVERB
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          {/* Render the recording animation */}
+          <View
+            style={{
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 88,
+            }}
+          >
+            <RecordingAnimation isRecording={isRecording} />
+          </View>
+
+          {/* Show recording duration */}
+          {isRecording && (
+            <Text style={GlobalStyles.headerText}>
+              {formatDuration(durationMillis)}
             </Text>
-          </Text>
-        </TouchableOpacity>
+          )}
+        </View>
+      </View>
+
+      <View style={styles.bottomOut}>
+        {/* Render the recording controls */}
+        <RecordingControls
+          isRecording={isRecording}
+          onStart={startRecording}
+          onStop={stopRecording}
+          disabled={false} // You may disable based on loading or other state
+        />
       </View>
     </SafeAreaView>
   );
@@ -56,7 +82,7 @@ const styles = StyleSheet.create({
   topSect: {
     flexDirection: "column",
     width: "100%",
-    height: "45%",
+    height: "75%",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 32,
@@ -100,5 +126,10 @@ const styles = StyleSheet.create({
     gap: 8,
     alignItems: "center",
     justifyContent: "center",
+  },
+  durationText: {
+    marginTop: 8,
+    fontSize: 24,
+    color: "#21102F",
   },
 });
