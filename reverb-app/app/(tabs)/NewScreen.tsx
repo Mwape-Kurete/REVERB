@@ -1,4 +1,10 @@
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import React from "react";
 import ReverbCards from "@/components/ui/ReverbCards";
 import GlobalStyles from "@/styles/GlobalStyles";
@@ -9,8 +15,10 @@ import Entypo from "@expo/vector-icons/Entypo";
 import RecordingAnimation from "@/components/RecordingAnimation"; // update path as needed
 import RecordingControls from "@/components/RecordingControls"; // update path as needed
 import RecordingLogic from "@/components/RecordingLogic"; // update path as needed
+import { useRouter } from "expo-router";
 
 const NewScreen = () => {
+  const router = useRouter();
   // Use the recording hook to get state & control functions
   const { isRecording, durationMillis, startRecording, stopRecording, uri } =
     RecordingLogic();
@@ -71,6 +79,14 @@ const NewScreen = () => {
           onStop={stopRecording}
           disabled={false} // You may disable based on loading or other state
         />
+        <TouchableOpacity
+          style={styles.medButton}
+          onPress={() => router.push("/(tabs)/PreviewScreen")}
+        >
+          <Text style={[GlobalStyles.textSecondary, { color: "#ffffff" }]}>
+            Save
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -105,6 +121,7 @@ const styles = StyleSheet.create({
   },
   bottomOut: {
     flex: 1,
+    flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
     marginTop: 24,
