@@ -1,9 +1,15 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "@/contexts/AuthContext";
+import { router, useRouter } from "expo-router";
 import GlobalStyles from "@/styles/GlobalStyles";
 
 const ProfileScreen = () => {
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <SafeAreaView style={GlobalStyles.container}>
       <Text style={GlobalStyles.headerText}> Your Profile</Text>
@@ -15,7 +21,7 @@ const ProfileScreen = () => {
           Email
         </Text>
       </View>
-      <TouchableOpacity style={styles.btnAction}>
+      <TouchableOpacity style={styles.btnAction} onPress={handleLogout}>
         <Text
           style={[
             GlobalStyles.secondaryButton,
@@ -46,3 +52,6 @@ const styles = StyleSheet.create({
     marginVertical: 24,
   },
 });
+function logout() {
+  throw new Error("Function not implemented.");
+}
