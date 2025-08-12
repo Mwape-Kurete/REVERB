@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,8 +6,17 @@ import { router, useRouter } from "expo-router";
 import GlobalStyles from "@/styles/GlobalStyles";
 
 const ProfileScreen = () => {
-  const handleLogout = () => {
-    logout();
+  const { logout } = useAuth(); // Get logout function from your auth context
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Optionally redirect to login screen after logout
+      router.replace("/(auth)/LoginScreen");
+    } catch (error: any) {
+      Alert.alert("Logout failed", error.message || "Please try again.");
+    }
   };
 
   return (

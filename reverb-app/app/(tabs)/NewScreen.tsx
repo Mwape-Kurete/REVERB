@@ -63,11 +63,9 @@ const NewScreen = () => {
           </View>
 
           {/* Show recording duration */}
-          {isRecording && (
-            <Text style={GlobalStyles.headerText}>
-              {formatDuration(durationMillis)}
-            </Text>
-          )}
+          <Text style={GlobalStyles.headerText}>
+            {formatDuration(durationMillis)}
+          </Text>
         </View>
       </View>
 
