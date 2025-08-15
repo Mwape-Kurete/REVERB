@@ -79,7 +79,12 @@ const NewScreen = () => {
         />
         <TouchableOpacity
           style={styles.medButton}
-          onPress={() => router.push("/(tabs)/PreviewScreen")}
+          onPress={() =>
+            router.push({
+              pathname: "/(tabs)/PreviewScreen",
+              params: { audioUri: uri }, // passing recorded audio URI here
+            })
+          }
         >
           <Text style={[GlobalStyles.textSecondary, { color: "#ffffff" }]}>
             Save

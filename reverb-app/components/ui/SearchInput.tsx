@@ -1,14 +1,126 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  TextInput,
+  FlatList,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
+import { searchTracks, TrackInfo } from "@/services/lastfmService";
+import GlobalStyles from "@/styles/GlobalStyles";
 
-const SearchInput = () => {
+const DEBOUNCE_DELAY = 300; // ms debounce delay
+
+export default function SearchInput({
+  onSelect,
+}: {
+  onSelect: (track: TrackInfo) => void;
+}) {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<TrackInfo[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [timerId, setTimerId] = useState<ReturnType<typeof setTimeout> | null>(
+    null
+  );
+
+  useEffect(() => {
+    // Clear previous timer if query changes within debounce period
+    if (timerId) clearTimeout(timerId);
+
+    if (query.length < 2) {
+      setResults([]); // Clear results if query too short
+      setLoading(false);
+      return;
+    }
+
+    // Set new debounce timer
+    const newTimerId = setTimeout(async () => {
+      setLoading(true);
+      const tracks = await searchTracks(query);
+      setResults(tracks);
+      setLoading(false);
+    }, DEBOUNCE_DELAY);
+
+    setTimerId(newTimerId);
+
+    // Cleanup on unmount or query changes
+    return () => {
+      clearTimeout(newTimerId);
+    };
+  }, [query]);
+
   return (
-    <View>
-      <Text>SearchInput</Text>
+    <View style={styles.container}>
+      <TextInput
+        placeholder="Search for a song"
+        value={query}
+        onChangeText={setQuery}
+        style={GlobalStyles.formInput}
+        autoCorrect={false}
+        autoCapitalize="none"
+      />
+
+      {loading && <ActivityIndicator style={{ marginVertical: 8 }} />}
+
+      {results.length > 0 && query.length >= 2 && (
+        <FlatList
+          data={results}
+          keyExtractor={(item) => item.url}
+          keyboardShouldPersistTaps="handled"
+          style={styles.list}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => onSelect(item)}
+              style={styles.listItem}
+            >
+              {item.image ? (
+                <Image source={{ uri: item.image }} style={styles.image} />
+              ) : null}
+              <Text style={styles.text}>
+                {item.name} - {item.artist}
+              </Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
-};
+}
 
-export default SearchInput;
-
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: { width: "100%" },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 10,
+    fontSize: 16,
+  },
+  list: {
+    maxHeight: 200,
+    marginTop: 8,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#fff",
+  },
+  listItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  image: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    borderRadius: 4,
+  },
+  text: {
+    fontSize: 16,
+  },
+});

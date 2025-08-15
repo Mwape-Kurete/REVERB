@@ -1,7 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
+
+// Workaround to cast the function to any (bypass TS error)
+import * as firebaseAuth from "firebase/auth";
+const getReactNativePersistence = (firebaseAuth as any)
+  .getReactNativePersistence;
 
 const firebaseConfig = {
   apiKey: "AIzaSyDp5n4zxhvIqNwUBmjeaT6DrnrAvh5vgmk",
@@ -15,5 +21,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth();
-export const db = getFirestore();
+// Set up persistent Auth
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+
+export const db = getFirestore(app);
