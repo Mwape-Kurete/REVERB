@@ -20,8 +20,13 @@ import { useRouter } from "expo-router";
 const NewScreen = () => {
   const router = useRouter();
   // Use the recording hook to get state & control functions
-  const { isRecording, durationMillis, startRecording, stopRecording, uri } =
-    RecordingLogic();
+  const {
+    isRecording,
+    durationMillis,
+    startRecording,
+    stopRecording,
+    currentUri,
+  } = RecordingLogic();
 
   // Format duration as mm:ss for display
   const formatDuration = (ms: number) => {
@@ -82,7 +87,7 @@ const NewScreen = () => {
           onPress={() =>
             router.push({
               pathname: "/(tabs)/PreviewScreen",
-              params: { audioUri: uri }, // passing recorded audio URI here
+              params: { audioUri: currentUri }, // passing recorded audio URI here
             })
           }
         >

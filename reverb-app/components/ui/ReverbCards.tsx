@@ -14,8 +14,6 @@ export default ReverbCards;
 
 const styles = StyleSheet.create({
   card: {
-    height: 240,
-    width: 175,
     borderRadius: 12,
     backgroundColor: "#F5EDFC",
     padding: 16,

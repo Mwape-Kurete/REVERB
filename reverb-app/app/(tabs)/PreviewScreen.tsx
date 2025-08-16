@@ -14,6 +14,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 
 import SearchInput from "@/components/ui/SearchInput";
 import ReverbAudioPlayer from "@/components/ReverbAudioPlayer";
+import MoodInput from "@/components/ui/MoodInput";
 
 const PreviewScreen = () => {
   const router = useRouter();
@@ -69,16 +70,12 @@ const PreviewScreen = () => {
         <View style={styles.infoContainer}>
           <SearchInput onSelect={handleSongSelect} />
 
-          <TextInput
-            style={[GlobalStyles.formInput, { marginVertical: 12 }]}
-            placeholder="Attach a mood or emotion"
-            value={mood}
-            onChangeText={setMood}
-          />
+          <MoodInput />
 
           <TextInput
             style={[GlobalStyles.formInput, { marginVertical: 12, height: 80 }]}
             placeholder="Write your reflection"
+            placeholderTextColor="#D8B8F1"
             multiline
             numberOfLines={4}
             value={reflection}
@@ -86,35 +83,18 @@ const PreviewScreen = () => {
           />
         </View>
 
-        <View style={styles.playbackContainer}>
-          {audioUri ? (
-            <ReverbAudioPlayer source={audioUri} />
-          ) : selectedTrack ? (
-            <Text style={GlobalStyles.headerText}>
-              Selected Song: {selectedTrack.name} - {selectedTrack.artist}
-            </Text>
-          ) : (
-            <Text style={GlobalStyles.headerText}>
-              Select a song to preview
-            </Text>
-          )}
+        <View style={styles.bottomContainer}>
+          <View style={styles.playbackContainer}>
+            {audioUri ? (
+              <ReverbAudioPlayer source={audioUri} />
+            ) : (
+              <Text style={GlobalStyles.textPrimary}>
+                Error loading recording
+                <Text style={GlobalStyles.textInfo}>Try Again</Text>
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
-
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity style={styles.medButton}>
-          <MaterialCommunityIcons name="rewind" size={24} color="#21102F" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.medButton}>
-          <MaterialCommunityIcons name="play" size={24} color="#21102F" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.medButton}>
-          <MaterialCommunityIcons
-            name="fast-forward"
-            size={24}
-            color="#21102F"
-          />
-        </TouchableOpacity>
       </View>
 
       <View>
@@ -147,7 +127,8 @@ const styles = StyleSheet.create({
   pageHeader: {
     flexDirection: "row",
     width: "100%",
-    paddingBottom: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     alignItems: "center",
     justifyContent: "space-between",
     borderBottomWidth: 1,

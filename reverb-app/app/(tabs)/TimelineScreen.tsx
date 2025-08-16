@@ -39,6 +39,7 @@ const TimelineScreen = () => {
           <TextInput
             style={[GlobalStyles.formInput, { marginVertical: 32 }]}
             placeholder="Search through your REVERBs"
+            placeholderTextColor="#D8B8F1"
           />
         </View>
       </View>
@@ -47,7 +48,7 @@ const TimelineScreen = () => {
           <ReverbCards style={styles.custCard}>
             <Text
               style={[
-                GlobalStyles.pillTabs,
+                GlobalStyles.badges,
                 GlobalStyles.headerText,
                 styles.cardBadge,
                 { fontSize: 12 },
@@ -60,7 +61,7 @@ const TimelineScreen = () => {
           <ReverbCards style={styles.custCard}>
             <Text
               style={[
-                GlobalStyles.pillTabs,
+                GlobalStyles.badges,
                 GlobalStyles.headerText,
                 styles.cardBadge,
                 { fontSize: 12 },
@@ -73,7 +74,7 @@ const TimelineScreen = () => {
           <ReverbCards style={styles.custCard}>
             <Text
               style={[
-                GlobalStyles.pillTabs,
+                GlobalStyles.badges,
                 GlobalStyles.headerText,
                 styles.cardBadge,
                 { fontSize: 12 },
@@ -86,7 +87,7 @@ const TimelineScreen = () => {
           <ReverbCards style={styles.custCard}>
             <Text
               style={[
-                GlobalStyles.pillTabs,
+                GlobalStyles.badges,
                 GlobalStyles.headerText,
                 styles.cardBadge,
                 { fontSize: 12 },
@@ -127,12 +128,14 @@ const styles = StyleSheet.create({
   },
   custCard: {
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
     marginBottom: 8,
+    height: 150,
   },
   cardBadge: {
     textAlign: "center",
     justifyContent: "center",
+    color: "#ffffff",
   },
   medButton: {
     backgroundColor: "#21102F",

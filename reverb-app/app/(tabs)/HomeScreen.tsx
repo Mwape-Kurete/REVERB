@@ -122,6 +122,8 @@ const styles = StyleSheet.create({
   custCard: {
     justifyContent: "space-between",
     alignItems: "flex-end",
+    height: 240,
+    width: 175,
   },
   medButton: {
     backgroundColor: "#21102F",

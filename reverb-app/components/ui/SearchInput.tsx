@@ -25,6 +25,7 @@ export default function SearchInput({
   const [timerId, setTimerId] = useState<ReturnType<typeof setTimeout> | null>(
     null
   );
+  const [selected, setSelected] = useState<TrackInfo | null>(null);
 
   useEffect(() => {
     // Clear previous timer if query changes within debounce period
@@ -55,9 +56,12 @@ export default function SearchInput({
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Search for a song"
-        value={query}
-        onChangeText={setQuery}
+        placeholder={"Search for a song"}
+        value={selected ? `${selected.name} by ${selected.artist}` : query}
+        onChangeText={(text) => {
+          setSelected(null); // clearing selection when searching (activiting text input)
+          setQuery(text);
+        }}
         style={GlobalStyles.formInput}
         autoCorrect={false}
         autoCapitalize="none"
@@ -73,7 +77,11 @@ export default function SearchInput({
           style={styles.list}
           renderItem={({ item }) => (
             <TouchableOpacity
-              onPress={() => onSelect(item)}
+              onPress={() => {
+                setSelected(item);
+                onSelect(item);
+                setResults([]);
+              }}
               style={styles.listItem}
             >
               {item.image ? (
@@ -94,17 +102,14 @@ const styles = StyleSheet.create({
   container: { width: "100%" },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    borderColor: "#9D4EDD",
     padding: 10,
     fontSize: 16,
   },
   list: {
     maxHeight: 200,
-    marginTop: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: "#ccc",
+    borderBottomWidth: 1,
+    borderColor: "#9D4EDD",
     backgroundColor: "#fff",
   },
   listItem: {
@@ -112,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: "#D8B8F1",
   },
   image: {
     width: 40,

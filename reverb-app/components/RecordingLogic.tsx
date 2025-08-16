@@ -20,6 +20,8 @@ const RecordingLogic = () => {
   //holds timer for tracking rotation
   const intervalRef = useRef<number | null>(null);
 
+  const [currentUri, setCurrentUri] = useState<string | null>(null);
+
   useEffect(() => {
     (async () => {
       const status = await AudioModule.requestRecordingPermissionsAsync();
@@ -63,7 +65,9 @@ const RecordingLogic = () => {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
-      await audioRecorder.stop(); // Stop recording
+      await audioRecorder.stop(); // Stop recording and unloads recoring internally
+
+      setCurrentUri(audioRecorder.uri ?? null);
       // Recorded audio is available at audioRecorder.uri
     } catch (error) {
       Alert.alert("Could not stop recording:", (error as Error).message);
@@ -73,7 +77,7 @@ const RecordingLogic = () => {
   return {
     isRecording: recorderState.isRecording,
     durationMillis: recorderState.durationMillis,
-    uri: audioRecorder.uri,
+    currentUri, //from state, this should be updated after stopRecording finishes
     startRecording,
     stopRecording,
   };
