@@ -48,7 +48,17 @@ export default function DrawerLayout() {
         {/* Hidden screen */}
         <Drawer.Screen
           name="PreviewScreen"
-          options={{ drawerItemStyle: { display: "none" } }}
+          options={{
+            drawerItemStyle: { display: "none" },
+            title: "Save REVERB",
+          }}
+        />
+        <Drawer.Screen
+          name="ReverbViewScreen"
+          options={{
+            drawerItemStyle: { display: "none" },
+            title: "Your REVERB",
+          }}
         />
         <Drawer.Screen
           name="index"

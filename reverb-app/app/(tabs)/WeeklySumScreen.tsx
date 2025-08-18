@@ -1,125 +1,185 @@
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-  TouchableOpacity,
   View,
+  Text,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
 } from "react-native";
-import React from "react";
-
+import { ReverbEntry } from "@/interface/Entries";
+import { useAudioRecording } from "@/contexts/AudioRecordingContext";
 import GlobalStyles from "@/styles/GlobalStyles";
-import ReverbCards from "@/components/ui/ReverbCards";
 
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Entypo from "@expo/vector-icons/Entypo";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
+const WeekStartsOn = 1; // Monday
 
 const WeeklySumScreen = () => {
+  const { recordings, fetchRecordings } = useAudioRecording();
+  const [weekReverbs, setWeekReverbs] = useState<ReverbEntry[]>([]);
+
+  useEffect(() => {
+    fetchRecordings();
+  }, []);
+
+  useEffect(() => {
+    // Filter recordings for the current week
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(
+      now.getDate() - ((now.getDay() + 7 - WeekStartsOn) % 7)
+    );
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const filtered = recordings.filter(
+      (r) => r.timestamp >= startOfWeek.getTime()
+    );
+    setWeekReverbs(filtered);
+  }, [recordings]);
+
+  const allMoods: string[] = weekReverbs.flatMap((r) => r.moodTags);
+
+  const moodCount: Record<string, number> = allMoods.reduce(
+    (acc: Record<string, number>, mood: string) => {
+      acc[mood] = (acc[mood] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
+
+  const mostFrequentMood = Object.entries(moodCount).sort(
+    (a, b) => b[1] - a[1]
+  )[0]?.[0];
+
+  // Choose longest reflection as highlight (or empty string)
+  const favReflection =
+    weekReverbs.sort((a, b) => b.reflection.length - a.reflection.length)[0]
+      ?.reflection || "";
+
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
-      <View style={styles.topSect}>
-        <View style={{ alignItems: "center", justifyContent: "center" }}>
-          <Text
-            style={[
-              GlobalStyles.subHeaderText,
-              GlobalStyles.spacerSmaller,
-              { fontWeight: 400 },
-            ]}
-          >
-            Your{" "}
-            <Text style={[GlobalStyles.headerText, { fontSize: 16 }]}>
-              REVERB
-            </Text>{" "}
-            Wrap-up
+      <ScrollView contentContainerStyle={{ padding: 16 }}>
+        <View style={styles.topSect}>
+          <Text style={[GlobalStyles.headerText, { fontSize: 20 }]}>
+            ✨ Your Week in REVERB ✨
           </Text>
-          <Text style={[GlobalStyles.textInfo, GlobalStyles.spacerSmall]}>
-            View your REVERB weekly wrap.
+          <Text style={[GlobalStyles.textInfo, { marginVertical: 8 }]}>
+            “Looking back, what stands out about your moods and reflections?”
           </Text>
         </View>
-      </View>
-      <View style={styles.bottomOut}>
-        <ScrollView style={{ width: "100%" }}>
-          <TouchableOpacity style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.pillTabs,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #00
+
+        {/* Analytics Section */}
+        <View style={styles.introBox}>
+          <Text style={styles.sectionTitle}>Mood Trends</Text>
+          <Text>
+            Top mood:{" "}
+            <Text style={styles.highlight}>{mostFrequentMood || "–"}</Text>
+          </Text>
+          <Text>
+            You created{" "}
+            <Text style={styles.highlight}>{weekReverbs.length}</Text> REVERBs
+            this week.
+          </Text>
+        </View>
+
+        {/* Mood Cloud */}
+        <View
+          style={[styles.introBox, { flexDirection: "row", flexWrap: "wrap" }]}
+        >
+          {Object.entries(moodCount).map(([mood, count]) => (
+            <View key={mood} style={[GlobalStyles.pillTabs, { margin: 4 }]}>
+              <Text style={{ fontSize: 12 + count * 2 }}>{mood}</Text>
+            </View>
+          ))}
+        </View>
+
+        {/* Reflection Snippet */}
+        {favReflection && (
+          <View style={styles.introBox}>
+            <Text style={styles.sectionTitle}>Reflection Highlight</Text>
+            <Text style={styles.reflection}>
+              “{favReflection.slice(0, 160)}
+              {favReflection.length > 160 ? "…" : ""}”
             </Text>
-            <Text>Mon, 01/09/25</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.pillTabs,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #01
+          </View>
+        )}
+
+        {/* REVERBs of the week */}
+        <View style={{ marginTop: 28 }}>
+          <Text style={styles.sectionTitle}>Your REVERBs This Week</Text>
+          {weekReverbs.length ? (
+            weekReverbs.map((item, i) => (
+              <TouchableOpacity key={item.id} style={styles.custCard}>
+                <Text
+                  style={[
+                    GlobalStyles.badges,
+                    GlobalStyles.headerText,
+                    styles.cardBadge,
+                    { fontSize: 12 },
+                  ]}
+                >
+                  REVERB #{i + 1}
+                </Text>
+                <Text>{new Date(item.timestamp).toLocaleDateString()}</Text>
+                <Text style={styles.track}>
+                  {item.songTitle} – {item.songArtist}
+                </Text>
+                <Text style={styles.moods}>
+                  Tags: {item.moodTags.join(", ")}
+                </Text>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text style={{ marginTop: 16 }}>
+              No REVERBs this week. Try recording your next reflection!
             </Text>
-            <Text>Mon, 01/09/25</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
+          )}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default WeeklySumScreen;
-
 const styles = StyleSheet.create({
   topSect: {
-    flexDirection: "column",
-    width: "100%",
-    height: "45%",
     alignItems: "center",
-    justifyContent: "space-between",
-    marginTop: 32,
+    justifyContent: "center",
+    marginBottom: 16,
   },
-  bottomOut: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    flexWrap: "wrap",
-    width: "100%",
-    marginTop: 24,
-    borderTopWidth: 1,
-    borderColor: "#020103",
-    backgroundColor: "#ffffff",
-    padding: 8,
+  introBox: {
+    backgroundColor: "#F5EDFC",
+    borderRadius: 14,
+    padding: 16,
+    marginVertical: 8,
+  },
+  sectionTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  highlight: {
+    color: "#9B34F1",
+    fontWeight: "bold",
+  },
+  reflection: {
+    fontStyle: "italic",
+    marginTop: 4,
   },
   custCard: {
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    marginBottom: 20,
-    padding: 12,
-    elevation: 4,
-    boxShadow:
-      "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
-    borderRadius: 8,
+    marginBottom: 16,
+    padding: 14,
+    borderRadius: 12,
+    backgroundColor: "#F2E6FA",
   },
   cardBadge: {
-    textAlign: "center",
-    justifyContent: "center",
+    backgroundColor: "#E7D1F2",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    alignSelf: "flex-start",
+    marginBottom: 4,
   },
-  medButton: {
-    backgroundColor: "#21102F",
-    color: "#ffffff",
-    height: 56,
-    minWidth: "48%",
-    padding: 12,
-    marginBottom: 12,
-    borderRadius: 12,
-    flexDirection: "row",
-    gap: 8,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  track: { fontWeight: "bold", marginTop: 4 },
+  moods: { color: "#722BB7", marginTop: 2 },
 });
+
+export default WeeklySumScreen;

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 
 import GlobalStyles from "@/styles/GlobalStyles";
 import ReverbCards from "@/components/ui/ReverbCards";
@@ -14,8 +14,32 @@ import ReverbCards from "@/components/ui/ReverbCards";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
+import { useAudioRecording } from "@/contexts/AudioRecordingContext";
+import { useRouter } from "expo-router";
 
 const TimelineScreen = () => {
+  const router = useRouter();
+  const { recordings, loading, error, fetchRecordings } = useAudioRecording();
+
+  // fetch recordings when scren loads
+  useEffect(() => {
+    fetchRecordings();
+  }, []);
+
+  // Helper to format timestamp to a readable date strin
+  const formatDate = (timestamp: number) => {
+    const date = new Date(timestamp);
+    return date.toDateString(); // "Mon, 01/08/23"
+  };
+
+  //navigation to ReverbViewScreen
+  const handleCardSelect = (entryId: string) => {
+    router.push({
+      pathname: "/(tabs)/ReverbViewScreen",
+      params: { entryId },
+    });
+  };
+
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
       <View style={styles.topSect}>
@@ -45,58 +69,39 @@ const TimelineScreen = () => {
       </View>
       <View style={styles.bottomOut}>
         <ScrollView style={{ width: "100%" }}>
-          <ReverbCards style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.badges,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #00
+          {loading && <Text>Loading...</Text>}
+          {error && <Text style={{ color: "red" }}>{error}</Text>}
+
+          {!loading &&
+            recordings.map((entry, index) => (
+              <ReverbCards
+                onPress={() => handleCardSelect(entry.id)}
+                style={styles.custCard}
+                key={entry.id}
+              >
+                <Text
+                  style={[
+                    GlobalStyles.badges,
+                    GlobalStyles.headerText,
+                    styles.cardBadge,
+                    { fontSize: 12 },
+                  ]}
+                >
+                  REVERB #{index + 1}
+                </Text>
+                <Text>{formatDate(entry.timestamp)}</Text>
+                <Text>
+                  {entry.songTitle} - {entry.songArtist}
+                </Text>
+                {/* You may add more details like mood tags, reflection excerpt, etc. */}
+              </ReverbCards>
+            ))}
+
+          {recordings.length === 0 && !loading && (
+            <Text style={{ textAlign: "center", marginTop: 20 }}>
+              No recordings found
             </Text>
-            <Text>Mon, 01/09/25</Text>
-          </ReverbCards>
-          <ReverbCards style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.badges,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #00
-            </Text>
-            <Text>Mon, 01/09/25</Text>
-          </ReverbCards>
-          <ReverbCards style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.badges,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #00
-            </Text>
-            <Text>Mon, 01/09/25</Text>
-          </ReverbCards>
-          <ReverbCards style={styles.custCard}>
-            <Text
-              style={[
-                GlobalStyles.badges,
-                GlobalStyles.headerText,
-                styles.cardBadge,
-                { fontSize: 12 },
-              ]}
-            >
-              REVERB #00
-            </Text>
-            <Text>Mon, 01/09/25</Text>
-          </ReverbCards>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>

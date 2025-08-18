@@ -9,7 +9,15 @@ import React, { useState } from "react";
 import GlobalStyles from "@/styles/GlobalStyles";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 
-export default function MoodInput() {
+interface MoodInputProps {
+  onChangeMoodTags: (mood: string[]) => void; //a callback to pass mood tags up
+  initialMoodTags?: string[]; // optional initial tags if you want controlled
+}
+
+export default function MoodInput({
+  onChangeMoodTags,
+  initialMoodTags = [],
+}: MoodInputProps) {
   const [moodTags, setMoodTags] = useState<string[]>([]);
   const [newMood, setNewMood] = useState("");
 
@@ -17,14 +25,18 @@ export default function MoodInput() {
   const handleAddMood = () => {
     const trimmedMood = newMood.trim();
     if (trimmedMood && !moodTags.includes(trimmedMood)) {
-      setMoodTags([...moodTags, trimmedMood]);
+      const updateMoodTags = [...moodTags, trimmedMood];
+      setMoodTags(updateMoodTags);
+      onChangeMoodTags(updateMoodTags); // notify parent of new tags
       setNewMood("");
     }
   };
 
   // Remove a specific mood by index
   const handleRemoveMood = (index: number) => {
-    setMoodTags(moodTags.filter((_, i) => i !== index));
+    const updateMoodTags = moodTags.filter((_, i) => i !== index);
+    setMoodTags(updateMoodTags);
+    onChangeMoodTags(updateMoodTags); //notifying parent about updated list
   };
 
   return (

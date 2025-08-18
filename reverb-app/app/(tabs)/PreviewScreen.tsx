@@ -7,6 +7,8 @@ import {
   TextInput,
   Alert,
   SafeAreaView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import GlobalStyles from "@/styles/GlobalStyles";
@@ -16,8 +18,13 @@ import SearchInput from "@/components/ui/SearchInput";
 import ReverbAudioPlayer from "@/components/ReverbAudioPlayer";
 import MoodInput from "@/components/ui/MoodInput";
 
+import { useAudioRecording } from "@/contexts/AudioRecordingContext";
+
 const PreviewScreen = () => {
   const router = useRouter();
+
+  const { addRecording } = useAudioRecording();
+
   // Use useLocalSearchParams to get audioUri param passed via URL
   const params = useLocalSearchParams<{ audioUri?: string }>();
   const audioUri = params.audioUri;
@@ -28,7 +35,8 @@ const PreviewScreen = () => {
     artist: string;
     url: string;
   } | null>(null);
-  const [mood, setMood] = useState("");
+
+  const [moodTags, setMoodTags] = useState<string[]>([]);
   const [reflection, setReflection] = useState("");
 
   const handleSongSelect = (track: {
@@ -39,85 +47,105 @@ const PreviewScreen = () => {
     setSelectedTrack(track);
   };
 
-  const handleSave = () => {
-    if (!selectedTrack) {
-      Alert.alert("Please select a song first.");
+  const handleAddMood = () => {
+    //somehow gotta fetch moodTags from MoodInput
+  };
+
+  const handleSave = async () => {
+    if (!audioUri) {
+      Alert.alert("No audio to sace :(");
       return;
     }
 
-    // Add your saving logic here including metadata and audioUri...
-    Alert.alert(
-      "Saved!",
-      `Song: ${selectedTrack.name} by ${selectedTrack.artist}`
-    );
+    // Adding audio to firebase storage:
+    //1. Converting URI to a blob if needed
+    const response = await fetch(audioUri);
+    const audioBlob = await response.blob();
+
+    const payload = {
+      songTitle: selectedTrack?.name || "",
+      songArtist: selectedTrack?.artist || "",
+      moodTags: moodTags || [],
+      reflection: reflection || "",
+    };
+
+    await addRecording(audioBlob, payload);
     router.push("/(tabs)/TimelineScreen");
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.container}>
-      <View style={styles.pageHeader}>
-        <Text style={[GlobalStyles.headerText, { fontSize: 20 }]}>
-          REVERB #00{" "}
-        </Text>
-        <MaterialCommunityIcons
-          name="record-circle-outline"
-          size={48}
-          color="#21102F"
-        />
-      </View>
-
-      <View style={styles.mainContent}>
-        <View style={styles.infoContainer}>
-          <SearchInput onSelect={handleSongSelect} />
-
-          <MoodInput />
-
-          <TextInput
-            style={[GlobalStyles.formInput, { marginVertical: 12, height: 80 }]}
-            placeholder="Write your reflection"
-            placeholderTextColor="#D8B8F1"
-            multiline
-            numberOfLines={4}
-            value={reflection}
-            onChangeText={setReflection}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={GlobalStyles.container}>
+        <View style={styles.pageHeader}>
+          <Text style={[GlobalStyles.headerText, { fontSize: 20 }]}>
+            REVERB #00{" "}
+          </Text>
+          <MaterialCommunityIcons
+            name="record-circle-outline"
+            size={48}
+            color="#21102F"
           />
         </View>
 
-        <View style={styles.bottomContainer}>
-          <View style={styles.playbackContainer}>
-            {audioUri ? (
-              <ReverbAudioPlayer source={audioUri} />
-            ) : (
-              <Text style={GlobalStyles.textPrimary}>
-                Error loading recording
-                <Text style={GlobalStyles.textInfo}>Try Again</Text>
-              </Text>
-            )}
+        <View style={styles.mainContent}>
+          <View style={styles.infoContainer}>
+            <SearchInput onSelect={handleSongSelect} />
+
+            <MoodInput
+              onChangeMoodTags={(tags) => setMoodTags(tags)}
+              initialMoodTags={moodTags}
+            />
+
+            <TextInput
+              style={[
+                GlobalStyles.formInput,
+                { marginVertical: 12, height: 80 },
+              ]}
+              placeholder="Write your reflection"
+              placeholderTextColor="#D8B8F1"
+              multiline
+              numberOfLines={4}
+              value={reflection}
+              onChangeText={setReflection}
+            />
+          </View>
+
+          <View style={styles.bottomContainer}>
+            <View style={styles.playbackContainer}>
+              {audioUri ? (
+                <ReverbAudioPlayer source={audioUri} />
+              ) : (
+                <Text style={GlobalStyles.textPrimary}>
+                  Error loading recording
+                  <Text style={GlobalStyles.textInfo}>Try Again</Text>
+                </Text>
+              )}
+            </View>
           </View>
         </View>
-      </View>
 
-      <View>
-        <TouchableOpacity
-          style={[
-            GlobalStyles.ghostButton,
-            { maxWidth: 120, alignSelf: "center", marginTop: 10 },
-            !selectedTrack && { opacity: 0.5 },
-          ]}
-          onPress={handleSave}
-          disabled={!selectedTrack}
-        >
-          <Text
+        <View>
+          <TouchableOpacity
             style={[
-              GlobalStyles.textPrimary,
-              { fontSize: 16, textAlign: "center" },
+              GlobalStyles.ghostButton,
+              { maxWidth: 120, alignSelf: "center", marginTop: 10 },
+              !selectedTrack && { opacity: 0.5 },
             ]}
+            onPress={handleSave}
+            disabled={!selectedTrack}
           >
-            Save REVERB
-          </Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+            <Text
+              style={[
+                GlobalStyles.textPrimary,
+                { fontSize: 16, textAlign: "center" },
+              ]}
+            >
+              Save REVERB
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 

@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useEffect,
-} from "react";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 import {
   getFirestore,
   collection,
@@ -12,8 +6,8 @@ import {
   addDoc,
   deleteDoc,
   getDocs,
+  getDoc,
   updateDoc,
-  DocumentData,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -23,32 +17,33 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
+import { ReverbEntry } from "@/interface/Entries";
 
+// Only metadata fields needed when adding an entry
 interface RecordingMetadata {
-  mood: string;
-  timestamp: string;
-  song: string;
+  songTitle: string;
+  songArtist: string;
+  moodTags: string[];
   reflection: string;
 }
 
-export interface RecordingEntry extends RecordingMetadata {
-  id: string;
-  audioUrl: string;
-}
-
+// this interface describes the stuff inside the context that components will "consume" (use)
 interface AudioRecordingContextType {
-  recordings: RecordingEntry[];
+  recordings: ReverbEntry[];
   loading: boolean;
   error: string | null;
   fetchRecordings: () => Promise<void>;
+  fetchRecordingsById: (entryId: string) => Promise<ReverbEntry | null>;
   addRecording: (audioBlob: Blob, metadata: RecordingMetadata) => Promise<void>;
   deleteRecording: (entryId: string) => Promise<void>;
 }
 
+// Create the context in React
 const AudioRecordingContext = createContext<
   AudioRecordingContextType | undefined
 >(undefined);
 
+// Custom hook for easy access to recording context
 export function useAudioRecording() {
   const context = useContext(AudioRecordingContext);
   if (!context) {
@@ -59,12 +54,13 @@ export function useAudioRecording() {
   return context;
 }
 
+// Provider component that wraps app or relevant screen
 export const AudioRecordingProvider = ({
   children,
 }: {
   children: ReactNode;
 }) => {
-  const [recordings, setRecordings] = useState<RecordingEntry[]>([]);
+  const [recordings, setRecordings] = useState<ReverbEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -75,7 +71,7 @@ export const AudioRecordingProvider = ({
   const db = getFirestore();
   const storage = getStorage();
 
-  // Fetch all recordings for current user
+  // Fetch all recordings for the signed-in user
   const fetchRecordings = async () => {
     if (!userId) {
       setError("User not authenticated");
@@ -83,26 +79,31 @@ export const AudioRecordingProvider = ({
     }
     setLoading(true);
     setError(null);
+
     try {
       const entriesRef = collection(db, "users", userId, "entries");
       const snapshot = await getDocs(entriesRef);
 
-      const loadedRecordings: RecordingEntry[] = snapshot.docs.map(
-        (docSnap) => {
-          const data = docSnap.data() as DocumentData;
-          return {
-            id: docSnap.id,
-            audioUrl: data.audioUrl,
-            mood: data.mood,
-            timestamp: data.timestamp,
-            song: data.song,
-            reflection: data.reflection,
-          };
-        }
-      );
+      // Match Firestore fields to ReverbEntry interface
+      const loadedRecordings: ReverbEntry[] = snapshot.docs.map((docSnap) => {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          songTitle: data.songTitle,
+          songArtist: data.songArtist,
+          moodTags: data.moodTags || [],
+          reflection: data.reflection,
+          timestamp:
+            typeof data.timestamp === "number"
+              ? data.timestamp
+              : data.timestamp?.toMillis?.() ?? Date.now(), // handle missing or firestore Timestamp
+          audioUrl: data.audioUrl,
+          userId: data.userId || userId,
+        };
+      });
 
-      // Optional: sort recordings by timestamp descending
-      loadedRecordings.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
+      // Sort by most recent
+      loadedRecordings.sort((a, b) => b.timestamp - a.timestamp);
 
       setRecordings(loadedRecordings);
     } catch (err: any) {
@@ -112,7 +113,50 @@ export const AudioRecordingProvider = ({
     }
   };
 
-  // Add new recording: upload audio, create firestore record with metadata & audioUrl
+  // Fetch recoridings by entry ID for the signed in user
+  const fetchRecordingsById = async (
+    entryId: string
+  ): Promise<ReverbEntry | null> => {
+    if (!userId) {
+      setError("User not authenticated");
+      return null;
+    }
+    setLoading(true);
+    setError(null);
+
+    try {
+      const docRef = doc(db, "users", userId, "entries", entryId);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        return null;
+      }
+
+      const data = docSnap.data();
+      const entry: ReverbEntry = {
+        id: docSnap.id,
+        songTitle: data.songTitle,
+        songArtist: data.songArtist,
+        moodTags: data.moodTags || [],
+        reflection: data.reflection,
+        timestamp:
+          typeof data.timestamp === "number"
+            ? data.timestamp
+            : data.timestamp?.toMillis?.() ?? Date.now(),
+        audioUrl: data.audioUrl,
+        userId: data.userId || userId,
+      };
+
+      return entry;
+    } catch (err: any) {
+      setError(err.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add a new recording (Firestore + Storage)
   const addRecording = async (audioBlob: Blob, metadata: RecordingMetadata) => {
     if (!userId) {
       setError("User not authenticated");
@@ -122,21 +166,26 @@ export const AudioRecordingProvider = ({
     setError(null);
 
     try {
-      // 1. Create Firestore entry without audioUrl first to get entryId
+      // Create Firestore entry first and get ID
       const entriesRef = collection(db, "users", userId, "entries");
-      const newDocRef = await addDoc(entriesRef, { ...metadata, audioUrl: "" });
+      const newDocRef = await addDoc(entriesRef, {
+        ...metadata,
+        audioUrl: "",
+        timestamp: Date.now(), // Use client timestamp, or serverTimestamp if preferred
+        userId,
+      });
 
-      // 2. Upload audio file to storage path `/audio/userId/entryId.mp3`
+      // Upload audio to Storage with entry ID
       const storageRef = ref(storage, `audio/${userId}/${newDocRef.id}.mp3`);
       await uploadBytes(storageRef, audioBlob);
 
-      // 3. Get download URL and update Firestore entry
+      // Get Storage URL and update Firestore entry
       const downloadUrl = await getDownloadURL(storageRef);
       await updateDoc(doc(db, "users", userId, "entries", newDocRef.id), {
         audioUrl: downloadUrl,
       });
 
-      // Refresh recordings after add
+      // Refresh recordings to reflect new entry
       await fetchRecordings();
     } catch (err: any) {
       setError(err.message);
@@ -145,7 +194,7 @@ export const AudioRecordingProvider = ({
     }
   };
 
-  // Delete a recording completely (Firestore + Storage)
+  // Delete an existing recording (Firestore + Storage)
   const deleteRecording = async (entryId: string) => {
     if (!userId) {
       setError("User not authenticated");
@@ -154,14 +203,14 @@ export const AudioRecordingProvider = ({
     setLoading(true);
     setError(null);
     try {
-      // Delete Firestore document
+      // Delete entry document
       await deleteDoc(doc(db, "users", userId, "entries", entryId));
 
-      // Delete Storage audio file
+      // Delete associated audio in Storage
       const storageRef = ref(storage, `audio/${userId}/${entryId}.mp3`);
       await deleteObject(storageRef);
 
-      // Refresh recordings after delete
+      // Optimistically update state
       setRecordings((prev) => prev.filter((entry) => entry.id !== entryId));
     } catch (err: any) {
       setError(err.message);
@@ -170,6 +219,7 @@ export const AudioRecordingProvider = ({
     }
   };
 
+  // The context value provided to consumers
   return (
     <AudioRecordingContext.Provider
       value={{
@@ -177,6 +227,7 @@ export const AudioRecordingProvider = ({
         loading,
         error,
         fetchRecordings,
+        fetchRecordingsById,
         addRecording,
         deleteRecording,
       }}
