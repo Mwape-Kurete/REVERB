@@ -26,7 +26,7 @@ const RecordingControls = ({
           onPress={onStop}
           disabled={disabled}
         >
-          <FontAwesome5 name="stop" size={40} color="#020103" />
+          <FontAwesome5 name="stop" size={20} color="#020103" />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -34,7 +34,7 @@ const RecordingControls = ({
           onPress={onStart}
           disabled={disabled}
         >
-          <MaterialIcons name="fiber-manual-record" size={58} color="#020103" />
+          <MaterialIcons name="fiber-manual-record" size={24} color="#020103" />
         </TouchableOpacity>
       )}
     </View>
@@ -49,12 +49,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   recControl: {
-    height: 74,
-    width: 74,
-    borderRadius: 12,
-    backgroundColor: "#F5EDFC",
-    padding: 4,
-    display: "flex",
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
     alignItems: "center",
     justifyContent: "center",
   },

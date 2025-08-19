@@ -78,15 +78,20 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     borderColor: "#020103",
+    backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 10,
-    backgroundColor: "#ffffff",
+    shadowColor: "#311844",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12, // for Android shadow
   },
   spokes: {
     width: 4,
     height: 64,
-    backgroundColor: "#5F2F86",
+    backgroundColor: "#020103", // updated primary purple from your palette
     borderRadius: 2,
     position: "absolute",
   },

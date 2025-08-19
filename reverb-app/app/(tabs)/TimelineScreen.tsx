@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#020103",
     backgroundColor: "#ffffff",
-    padding: 8,
+    padding: 12,
   },
   custCard: {
     justifyContent: "space-between",

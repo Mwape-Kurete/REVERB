@@ -127,20 +127,19 @@ const PreviewScreen = () => {
         <View>
           <TouchableOpacity
             style={[
-              GlobalStyles.ghostButton,
-              { maxWidth: 120, alignSelf: "center", marginTop: 10 },
+              styles.saveBtn,
+              {
+                marginTop: 10,
+                justifyContent: "center",
+                alignContent: "center",
+              },
               !selectedTrack && { opacity: 0.5 },
             ]}
             onPress={handleSave}
             disabled={!selectedTrack}
           >
-            <Text
-              style={[
-                GlobalStyles.textPrimary,
-                { fontSize: 16, textAlign: "center" },
-              ]}
-            >
-              Save REVERB
+            <Text style={[GlobalStyles.textPrimary, { fontSize: 16 }]}>
+              Save
             </Text>
           </TouchableOpacity>
         </View>
@@ -171,6 +170,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "50%",
     paddingTop: 24,
+    padding: 12,
   },
   playbackContainer: {
     width: "100%",
@@ -185,15 +185,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  medButton: {
-    backgroundColor: "#D8B8F1",
+  saveBtn: {
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderWidth: 1,
+    borderColor: "#020103", // Your palette
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+    color: "#120919",
     height: 56,
-    width: 100,
-    padding: 12,
+    width: "100%",
     marginBottom: 12,
-    borderRadius: 12,
-    flexDirection: "row",
-    gap: 8,
+    marginTop: 12,
     alignItems: "center",
     justifyContent: "center",
   },
