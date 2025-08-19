@@ -26,7 +26,7 @@ const RecordingControls = ({
           onPress={onStop}
           disabled={disabled}
         >
-          <FontAwesome5 name="stop" size={20} color="#020103" />
+          <FontAwesome5 name="stop" size={20} color="#3A0B10" />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
@@ -34,7 +34,7 @@ const RecordingControls = ({
           onPress={onStart}
           disabled={disabled}
         >
-          <MaterialIcons name="fiber-manual-record" size={24} color="#020103" />
+          <MaterialIcons name="fiber-manual-record" size={24} color="#CB4955" />
         </TouchableOpacity>
       )}
     </View>

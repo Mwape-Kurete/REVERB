@@ -77,12 +77,12 @@ const styles = StyleSheet.create({
     height: 150,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: "#020103",
+    borderColor: "#030000",
     backgroundColor: "#ffffff",
     alignItems: "center",
     justifyContent: "center",
     marginHorizontal: 10,
-    shadowColor: "#311844",
+    shadowColor: "#250206",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
   spokes: {
     width: 4,
     height: 64,
-    backgroundColor: "#020103", // updated primary purple from your palette
+    backgroundColor: "#F45B69",
     borderRadius: 2,
     position: "absolute",
   },

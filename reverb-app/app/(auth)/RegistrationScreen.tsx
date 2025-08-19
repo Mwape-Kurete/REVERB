@@ -118,7 +118,7 @@ const RegistrationScreen = () => {
           )}
         </TouchableOpacity>
         <TouchableHighlight
-          underlayColor="#F5EDFC"
+          underlayColor="#FEEFF0"
           style={GlobalStyles.ghostButton}
           onPress={() => router.push("/(auth)/LoginScreen")}
         >

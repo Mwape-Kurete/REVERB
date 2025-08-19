@@ -102,7 +102,7 @@ const PreviewScreen = () => {
                 { marginVertical: 12, height: 80 },
               ]}
               placeholder="Write your reflection"
-              placeholderTextColor="#D8B8F1"
+              placeholderTextColor="#F45B69"
               multiline
               numberOfLines={4}
               value={reflection}
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     borderBottomWidth: 1,
-    borderBottomColor: "#21102F",
+    borderBottomColor: "#030000",
   },
   mainContent: {
     flex: 1,
@@ -186,18 +186,18 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   saveBtn: {
-    backgroundColor: "#fff",
+    backgroundColor: "#feeff0d4",
     borderRadius: 30,
     paddingVertical: 14,
     paddingHorizontal: 32,
     borderWidth: 1,
-    borderColor: "#020103", // Your palette
+    borderColor: "#F45B69",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.08,
     shadowRadius: 4,
     elevation: 2,
-    color: "#120919",
+    color: "#030000",
     height: 56,
     width: "100%",
     marginBottom: 12,

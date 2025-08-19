@@ -60,7 +60,7 @@ export default function ReverbAudioPlayer({ source }: Props) {
           <MaterialCommunityIcons
             name={isPlaying ? "pause" : "play"}
             size={32}
-            color="#21102F"
+            color="#030000"
           />
         </TouchableOpacity>
       </View>

@@ -9,11 +9,11 @@ export default function DrawerLayout() {
         screenOptions={{
           headerShown: true,
           drawerStyle: {
-            backgroundColor: "#F5EDFC",
+            backgroundColor: "#CB4955",
             width: 240,
           },
-          drawerActiveTintColor: "#B171E4", // Active item text/icon color
-          drawerInactiveTintColor: "#020103", // Inactive item text/icon color
+          drawerActiveTintColor: "#250206", // Active item text/icon color
+          drawerInactiveTintColor: "#FEEFF0", // Inactive item text/icon color
           drawerLabelStyle: {
             fontFamily: "Michroma_400Regular",
             fontWeight: 300,
@@ -24,10 +24,10 @@ export default function DrawerLayout() {
             borderRadius: 8,
           },
           headerStyle: {
-            backgroundColor: "#F5EDFC",
+            backgroundColor: "#F67C87",
             height: 96,
           },
-          headerTintColor: "#020103", // Title & icon color in header
+          headerTintColor: "#250206", // Title & icon color in header
           headerTitleStyle: {
             fontFamily: "Michroma_400Regular",
             fontWeight: 300,

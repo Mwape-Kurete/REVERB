@@ -102,14 +102,14 @@ const styles = StyleSheet.create({
   container: { width: "100%" },
   input: {
     borderWidth: 1,
-    borderColor: "#9D4EDD",
+    borderColor: "#CB4955",
     padding: 10,
     fontSize: 16,
   },
   list: {
     maxHeight: 200,
     borderBottomWidth: 1,
-    borderColor: "#9D4EDD",
+    borderColor: "#F67C87",
     backgroundColor: "#fff",
   },
   listItem: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#D8B8F1",
+    borderBottomColor: "#F45B69",
   },
   image: {
     width: 40,

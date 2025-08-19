@@ -54,11 +54,11 @@ const HomeScreen = () => {
         <View style={styles.bottomCardRow}>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>REVERB Timeline</Text>
-            <AntDesign name="arrowright" size={40} color="#5F2F86" />
+            <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>Weekly REVERB Recap</Text>
-            <AntDesign name="arrowright" size={40} color="#5F2F86" />
+            <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>
         </View>
       </View>
