@@ -26,8 +26,15 @@ export default ReverbCards;
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 12,
-    backgroundColor: "#F5EDFC",
-    padding: 16,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 24,
+    marginVertical: 12,
+    // Subtle shadow for "card lift"
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2.5,
+    elevation: 8, // Android
   },
 });

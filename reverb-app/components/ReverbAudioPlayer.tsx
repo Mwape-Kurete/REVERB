@@ -60,7 +60,7 @@ export default function ReverbAudioPlayer({ source }: Props) {
           <MaterialCommunityIcons
             name={isPlaying ? "pause" : "play"}
             size={32}
-            color="#21102F"
+            color="#030000"
           />
         </TouchableOpacity>
       </View>
@@ -80,15 +80,15 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   controlButton: {
-    backgroundColor: "#D8B8F1",
+    width: 56,
     height: 56,
-    width: 100,
-    padding: 12,
-    marginBottom: 12,
-    marginHorizontal: 8,
-    borderRadius: 12,
-    flexDirection: "row",
-    gap: 8,
+    borderRadius: 55,
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 5,
     alignItems: "center",
     justifyContent: "center",
   },

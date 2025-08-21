@@ -45,7 +45,7 @@ const HomeScreen = () => {
                 },
               ]}
             >
-              Record a future note
+              Record a REVERB
             </Text>
           </TouchableOpacity>
         </View>
@@ -54,28 +54,12 @@ const HomeScreen = () => {
         <View style={styles.bottomCardRow}>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>REVERB Timeline</Text>
-            <AntDesign name="arrowright" size={40} color="#5F2F86" />
+            <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>
           <ReverbCards style={styles.custCard}>
             <Text style={GlobalStyles.subHeaderText}>Weekly REVERB Recap</Text>
-            <AntDesign name="arrowright" size={40} color="#5F2F86" />
+            <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>
-        </View>
-        <View style={styles.bottomSect}>
-          <TouchableOpacity style={styles.medButton}>
-            <Entypo name="controller-record" size={24} color="#ffffff" />
-            <Text style={{ color: "#ffffff" }}>
-              Record a{" "}
-              <Text
-                style={{
-                  fontFamily: "Michroma_400Regular",
-                  color: "#ffffff",
-                }}
-              >
-                REVERB
-              </Text>
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

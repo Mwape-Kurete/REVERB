@@ -63,7 +63,7 @@ const TimelineScreen = () => {
           <TextInput
             style={[GlobalStyles.formInput, { marginVertical: 32 }]}
             placeholder="Search through your REVERBs"
-            placeholderTextColor="#D8B8F1"
+            placeholderTextColor="#F45B69"
           />
         </View>
       </View>
@@ -127,9 +127,9 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: 24,
     borderTopWidth: 1,
-    borderColor: "#020103",
+    borderColor: "#030000",
     backgroundColor: "#ffffff",
-    padding: 8,
+    padding: 12,
   },
   custCard: {
     justifyContent: "space-between",
@@ -140,19 +140,6 @@ const styles = StyleSheet.create({
   cardBadge: {
     textAlign: "center",
     justifyContent: "center",
-    color: "#ffffff",
-  },
-  medButton: {
-    backgroundColor: "#21102F",
-    color: "#ffffff",
-    height: 56,
-    minWidth: "48%",
-    padding: 12,
-    marginBottom: 12,
-    borderRadius: 12,
-    flexDirection: "row",
-    gap: 8,
-    alignItems: "center",
-    justifyContent: "center",
+    color: "#4E141A",
   },
 });

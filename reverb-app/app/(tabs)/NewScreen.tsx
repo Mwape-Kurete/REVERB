@@ -75,26 +75,30 @@ const NewScreen = () => {
       </View>
 
       <View style={styles.bottomOut}>
-        {/* Render the recording controls */}
-        <RecordingControls
-          isRecording={isRecording}
-          onStart={startRecording}
-          onStop={stopRecording}
-          disabled={false}
-        />
-        <TouchableOpacity
-          style={styles.medButton}
-          onPress={() =>
-            router.push({
-              pathname: "/(tabs)/PreviewScreen",
-              params: { audioUri: currentUri }, // passing recorded audio URI here
-            })
-          }
-        >
-          <Text style={[GlobalStyles.textSecondary, { color: "#ffffff" }]}>
-            Save
-          </Text>
-        </TouchableOpacity>
+        {/* Rendering the recording controls */}
+        <View>
+          <RecordingControls
+            isRecording={isRecording}
+            onStart={startRecording}
+            onStop={stopRecording}
+            disabled={false}
+          />
+        </View>
+        <View style={{ width: "100%" }}>
+          <TouchableOpacity
+            style={styles.medButton}
+            onPress={() =>
+              router.push({
+                pathname: "/(tabs)/PreviewScreen",
+                params: { audioUri: currentUri }, // passing recorded audio URI here
+              })
+            }
+          >
+            <Text style={[GlobalStyles.textSecondary, { color: "#030000" }]}>
+              SAVE
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -106,47 +110,40 @@ const styles = StyleSheet.create({
   topSect: {
     flexDirection: "column",
     width: "100%",
-    height: "75%",
+    height: "55%",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 32,
   },
-  bottomSect: {
-    width: "100%",
-    paddingRight: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-  },
-  bottomCardRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    marginBottom: 12,
-    paddingHorizontal: 16,
-    gap: 16,
-    width: "95%",
-  },
   bottomOut: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
     alignItems: "center",
     marginTop: 24,
     borderTopWidth: 1,
     borderColor: "#120919",
-    backgroundColor: "#120919",
+    backgroundColor: "#ffffff",
     width: "100%",
     padding: 12,
   },
   medButton: {
-    backgroundColor: "#21102F",
-    color: "#ffffff",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderWidth: 1,
+    borderColor: "#030000",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    elevation: 2,
+    color: "#120919",
     height: 56,
-    minWidth: "48%",
+    width: "100%",
     padding: 12,
     marginBottom: 12,
-    borderRadius: 12,
+    marginTop: 12,
     flexDirection: "row",
     gap: 8,
     alignItems: "center",
@@ -155,6 +152,6 @@ const styles = StyleSheet.create({
   durationText: {
     marginTop: 8,
     fontSize: 24,
-    color: "#21102F",
+    color: "#030000",
   },
 });
