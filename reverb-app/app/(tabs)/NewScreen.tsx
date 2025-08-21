@@ -11,10 +11,10 @@ import GlobalStyles from "@/styles/GlobalStyles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 
-// Import your recording components and hook
-import RecordingAnimation from "@/components/RecordingAnimation"; // update path as needed
-import RecordingControls from "@/components/RecordingControls"; // update path as needed
-import RecordingLogic from "@/components/RecordingLogic"; // update path as needed
+// Import recording components and hook
+import RecordingAnimation from "@/components/RecordingAnimation";
+import RecordingControls from "@/components/RecordingControls";
+import RecordingLogic from "@/components/RecordingLogic";
 import { useRouter } from "expo-router";
 
 const NewScreen = () => {
@@ -28,7 +28,7 @@ const NewScreen = () => {
     currentUri,
   } = RecordingLogic();
 
-  // Format duration as mm:ss for display
+  // Formating duration as mm:ss for display
   const formatDuration = (ms: number) => {
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60)
@@ -56,7 +56,7 @@ const NewScreen = () => {
           </Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
-          {/* Render the recording animation */}
+          {/* Rendering the recording animation */}
           <View
             style={{
               alignItems: "center",
@@ -80,7 +80,7 @@ const NewScreen = () => {
           isRecording={isRecording}
           onStart={startRecording}
           onStop={stopRecording}
-          disabled={false} // You may disable based on loading or other state
+          disabled={false}
         />
         <TouchableOpacity
           style={styles.medButton}
