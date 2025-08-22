@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useRouter } from "expo-router";
 import React from "react";
 
 import GlobalStyles from "@/styles/GlobalStyles";
@@ -16,6 +17,15 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
+  const router = useRouter();
+
+  const navWithLoader = (destinationPath: string, message: string) => {
+    router.push(
+      `/FeedbackScreen?destination=${encodeURIComponent(
+        destinationPath
+      )}&message=${encodeURIComponent(message)}`
+    );
+  };
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
       <View style={styles.topSect}>
@@ -27,14 +37,32 @@ const HomeScreen = () => {
               { fontWeight: 400 },
             ]}
           >
-            Quote of the Day
+            Welcome to{" "}
+            <Text
+              style={[
+                GlobalStyles.textSecondary,
+                {
+                  fontFamily: "Michroma_400Regular",
+                  color: "#020103",
+                  fontSize: 14,
+                },
+              ]}
+            >
+              REVERB
+            </Text>
           </Text>
-          <Text style={[GlobalStyles.textInfo]}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <Text style={[GlobalStyles.textInfo, { textAlign: "center" }]}>
+            This app is all about introspection through audio journaling, Record
+            REVERBs, view weekly summaries and learn more about yourself
           </Text>
         </View>
         <View>
-          <TouchableOpacity style={GlobalStyles.TertiaryButton}>
+          <TouchableOpacity
+            style={GlobalStyles.secondaryButton}
+            onPress={() =>
+              navWithLoader("/(tabs)/NewScreen", "Ready to record a REVERB?")
+            }
+          >
             <Text
               style={[
                 GlobalStyles.textSecondary,
@@ -52,11 +80,27 @@ const HomeScreen = () => {
       </View>
       <View style={styles.bottomOut}>
         <View style={styles.bottomCardRow}>
-          <ReverbCards style={styles.custCard}>
+          <ReverbCards
+            style={styles.custCard}
+            onPress={() =>
+              navWithLoader(
+                "/(tabs)/TimelineScreen",
+                "Fetching all your REVERBs"
+              )
+            }
+          >
             <Text style={GlobalStyles.subHeaderText}>REVERB Timeline</Text>
             <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>
-          <ReverbCards style={styles.custCard}>
+          <ReverbCards
+            style={styles.custCard}
+            onPress={() =>
+              navWithLoader(
+                "/(tabs)/WeeklySumScreen",
+                "Compiling your weekly REVERB recap..."
+              )
+            }
+          >
             <Text style={GlobalStyles.subHeaderText}>Weekly REVERB Recap</Text>
             <AntDesign name="arrowright" size={40} color="#CB4955" />
           </ReverbCards>

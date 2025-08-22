@@ -83,7 +83,10 @@ const WeeklySumScreen = () => {
 
         {/* Mood Cloud */}
         <View
-          style={[styles.introBox, { flexDirection: "row", flexWrap: "wrap" }]}
+          style={[
+            styles.introBoxMood,
+            { flexDirection: "row", flexWrap: "wrap" },
+          ]}
         >
           {Object.entries(moodCount).map(([mood, count]) => (
             <View key={mood} style={[GlobalStyles.pillTabs, { margin: 4 }]}>
@@ -94,7 +97,7 @@ const WeeklySumScreen = () => {
 
         {/* Reflection Snippet */}
         {favReflection && (
-          <View style={styles.introBox}>
+          <View style={styles.introBoxTertiary}>
             <Text style={styles.sectionTitle}>Reflection Highlight</Text>
             <Text style={styles.reflection}>
               “{favReflection.slice(0, 160)}
@@ -146,19 +149,35 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   introBox: {
-    backgroundColor: "#F5EDFC",
-    borderRadius: 14,
+    backgroundColor: "#FEEFF0",
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
+  },
+  introBoxMood: {
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
+  },
+  introBoxTertiary: {
+    backgroundColor: "#ffffff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
+    borderRadius: 12,
     padding: 16,
     marginVertical: 8,
   },
   sectionTitle: {
-    fontWeight: "bold",
+    fontWeight: "500",
     fontSize: 16,
-    marginBottom: 4,
+    marginBottom: 16,
   },
   highlight: {
-    color: "#9B34F1",
-    fontWeight: "bold",
+    color: "#F45B69",
+    fontWeight: "500",
   },
   reflection: {
     fontStyle: "italic",
@@ -168,18 +187,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 14,
     borderRadius: 12,
-    backgroundColor: "#F2E6FA",
+    backgroundColor: "#FCCED2",
   },
   cardBadge: {
-    backgroundColor: "#E7D1F2",
+    backgroundColor: "#ffffff",
     paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 4,
+    paddingTop: 16,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 4,
     alignSelf: "flex-start",
-    marginBottom: 4,
+    justifyContent: "center",
+    marginBottom: 8,
   },
-  track: { fontWeight: "bold", marginTop: 4 },
-  moods: { color: "#722BB7", marginTop: 2 },
+  track: { fontWeight: "500", marginTop: 4 },
+  moods: { color: "#CB4955", marginTop: 2 },
 });
 
 export default WeeklySumScreen;

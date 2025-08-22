@@ -5,6 +5,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
+  Alert,
 } from "react-native";
 import React, { useEffect } from "react";
 
@@ -16,10 +17,12 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useAudioRecording } from "@/contexts/AudioRecordingContext";
 import { useRouter } from "expo-router";
+import RecordingAnimation from "@/components/RecordingAnimation";
 
 const TimelineScreen = () => {
   const router = useRouter();
-  const { recordings, loading, error, fetchRecordings } = useAudioRecording();
+  const { recordings, loading, error, fetchRecordings, deleteRecording } =
+    useAudioRecording();
 
   // fetch recordings when scren loads
   useEffect(() => {
@@ -40,6 +43,21 @@ const TimelineScreen = () => {
     });
   };
 
+  const confirmDelete = (entryId: string) => {
+    Alert.alert(
+      "Delete Recording",
+      "Are you sure you want to delete this recording?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: () => deleteRecording(entryId), // your deletion function from context
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView style={[GlobalStyles.container]}>
       <View style={styles.topSect}>
@@ -57,25 +75,26 @@ const TimelineScreen = () => {
             </Text>{" "}
             Timeline
           </Text>
-          <Text style={[GlobalStyles.textInfo, GlobalStyles.spacerSmall]}>
+          {/* <Text style={[GlobalStyles.textInfo, GlobalStyles.spacerSmall]}>
             Find all your past REVERBs here.
           </Text>
           <TextInput
             style={[GlobalStyles.formInput, { marginVertical: 32 }]}
             placeholder="Search through your REVERBs"
             placeholderTextColor="#F45B69"
-          />
+          /> */}
         </View>
       </View>
       <View style={styles.bottomOut}>
         <ScrollView style={{ width: "100%" }}>
-          {loading && <Text>Loading...</Text>}
+          {loading && <RecordingAnimation isRecording={true} />}
           {error && <Text style={{ color: "red" }}>{error}</Text>}
 
           {!loading &&
             recordings.map((entry, index) => (
               <ReverbCards
                 onPress={() => handleCardSelect(entry.id)}
+                onLongPress={() => confirmDelete(entry.id)}
                 style={styles.custCard}
                 key={entry.id}
               >

@@ -1,8 +1,18 @@
 import React from "react";
 import { Drawer } from "expo-router/drawer";
 import { AudioRecordingProvider } from "@/contexts/AudioRecordingContext";
+import { useRouter } from "expo-router";
 
 export default function DrawerLayout() {
+  const router = useRouter();
+
+  const goToLoadingFeedback = (destination: string, message: string) => {
+    router.push({
+      pathname: "/FeedbackScreen",
+      params: { destination, message },
+    });
+  };
+
   return (
     <AudioRecordingProvider>
       <Drawer
@@ -36,12 +46,54 @@ export default function DrawerLayout() {
         }}
       >
         {/* Visible drawer screens */}
-        <Drawer.Screen name="HomeScreen" options={{ title: "Home" }} />
-        <Drawer.Screen name="NewScreen" options={{ title: "New Reverb" }} />
-        <Drawer.Screen name="TimelineScreen" options={{ title: "Timeline" }} />
+        <Drawer.Screen
+          name="HomeScreen"
+          options={{ title: "Home" }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback(
+                "HomeScreen",
+                "Audio Journaling made different"
+              );
+            },
+          })}
+        />
+        <Drawer.Screen
+          name="NewScreen"
+          options={{ title: "New Reverb" }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback(
+                "NewScreen",
+                "Ready to journal, and think deeper?"
+              );
+            },
+          })}
+        />
+        <Drawer.Screen
+          name="TimelineScreen"
+          options={{ title: "Timeline" }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback(
+                "TimelineScreen",
+                "Fetching all your REVERBs"
+              );
+            },
+          })}
+        />
         <Drawer.Screen
           name="WeeklySumScreen"
           options={{ title: "Weekly Summary" }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback("WeeklySumScreen", "How has your week been?");
+            },
+          })}
         />
         <Drawer.Screen name="ProfileScreen" options={{ title: "Profile" }} />
 
@@ -52,6 +104,12 @@ export default function DrawerLayout() {
             drawerItemStyle: { display: "none" },
             title: "Save REVERB",
           }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback("PreviewScreen", "Loading...");
+            },
+          })}
         />
         <Drawer.Screen
           name="ReverbViewScreen"
@@ -59,9 +117,19 @@ export default function DrawerLayout() {
             drawerItemStyle: { display: "none" },
             title: "Your REVERB",
           }}
+          listeners={() => ({
+            drawerItemPress: (e) => {
+              e.preventDefault();
+              goToLoadingFeedback("ReverbViewScreen", "...");
+            },
+          })}
         />
         <Drawer.Screen
           name="index"
+          options={{ drawerItemStyle: { display: "none" } }}
+        />
+        <Drawer.Screen
+          name="FeedbackScreen"
           options={{ drawerItemStyle: { display: "none" } }}
         />
       </Drawer>

@@ -10,13 +10,23 @@ import React from "react";
 
 interface CardProps {
   onPress?: () => void; // optional function type
+  onLongPress?: () => void;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 }
 
-const ReverbCards: React.FC<CardProps> = ({ onPress, children, style }) => {
+const ReverbCards: React.FC<CardProps> = ({
+  onPress,
+  onLongPress,
+  children,
+  style,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.card, style]}>
+    <TouchableOpacity
+      onPress={onPress}
+      onLongPress={onLongPress}
+      style={[styles.card, style]}
+    >
       {children}
     </TouchableOpacity>
   );

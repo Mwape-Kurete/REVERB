@@ -78,7 +78,7 @@ const PreviewScreen = () => {
       <SafeAreaView style={GlobalStyles.container}>
         <View style={styles.pageHeader}>
           <Text style={[GlobalStyles.headerText, { fontSize: 20 }]}>
-            REVERB #00{" "}
+            New REVERB{" "}
           </Text>
           <MaterialCommunityIcons
             name="record-circle-outline"

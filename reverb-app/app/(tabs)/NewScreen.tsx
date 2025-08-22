@@ -49,10 +49,10 @@ const NewScreen = () => {
               { fontWeight: "400" },
             ]}
           >
-            Prompt of the Day
+            Reflect with REVERB
           </Text>
-          <Text style={[GlobalStyles.textInfo]}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <Text style={[GlobalStyles.textInfo, { textAlign: "center" }]}>
+            Try think deeper about this moment right now
           </Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center" }}>

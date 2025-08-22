@@ -23,11 +23,8 @@ const ProfileScreen = () => {
     <SafeAreaView style={GlobalStyles.container}>
       <Text style={GlobalStyles.headerText}> Your Profile</Text>
       <View style={styles.midSect}>
-        <Text style={[GlobalStyles.TertiaryButton, GlobalStyles.spacerLarge]}>
-          Users Full Name
-        </Text>
-        <Text style={[GlobalStyles.TertiaryButton, GlobalStyles.spacerLarge]}>
-          Email
+        <Text style={[GlobalStyles.textSecondary, GlobalStyles.spacerLarge]}>
+          MoodLoop Quiz Coming soon...
         </Text>
       </View>
       <TouchableOpacity style={styles.btnAction} onPress={handleLogout}>

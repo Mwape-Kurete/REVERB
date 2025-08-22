@@ -7,7 +7,7 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ title: "Oops!" }} />
       <View style={styles.container}>
         <Text style={styles.baseText}>This screen does not exist.</Text>
-        <Link href="/OnboardingScreen" style={styles.link}>
+        <Link href="/(auth)/LoginScreen" style={styles.link}>
           <Text style={styles.baseText}>Go to welcome screen!</Text>
         </Link>
       </View>
